@@ -262,26 +262,45 @@ body {
   }
 
   .detail-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 10vh 10vw;
-    gap: 2em;
-    overflow-y: auto;
+    display: block;
+    padding: 15vh 8vw 10vh 8vw;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--bg-color);
   }
 
   .detail-left {
-    align-items: center;
+    display: block;
     width: 100%;
-    margin-bottom: 1em;
+    text-align: left;
+    margin-bottom: 3em;
+  }
+
+  .detail-left .scrambled {
+    font-size: 8vw;
+    margin-bottom: 0.2em;
+    display: block;
   }
 
   .detail-right {
+    display: block;
     width: 100%;
-    font-size: 1rem !important;
-    text-align: justify;
-    padding-bottom: 10vh;
+    font-size: 1.1rem !important;
+    text-align: left;
+    padding-bottom: 20vh;
+    line-height: 1.7;
+  }
+
+  .detail-right h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.5em;
+    line-height: 1.4;
+  }
+
+  .detail-right p {
+    margin-bottom: 1.5em;
   }
 
   .process-layout {
