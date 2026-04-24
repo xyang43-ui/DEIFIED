@@ -213,16 +213,17 @@ const WorkView: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       const centerX = newNodes.reduce((acc, n) => acc + n.x, 0) / newNodes.length;
       const centerY = newNodes.reduce((acc, n) => acc + n.y, 0) / newNodes.length;
 
-      // Smoothly transition the transform to center the new nodes
-      // We use a target scale that ensures visibility (around 0.8 to 1.0)
-      const targetScale = 0.9;
+      // Responsive scale: much smaller on mobile to fit narrow screens
+      const isMobile = window.innerWidth < 768;
+      const targetScale = isMobile ? 0.5 : 0.9;
+
       setTransform({
         x: window.innerWidth / 2 - centerX * targetScale,
         y: window.innerHeight / 2 - centerY * targetScale,
         scale: targetScale
       });
-    }
-  };
+      }
+      };
 
   return (
     <div className="view-layer work-layout" 

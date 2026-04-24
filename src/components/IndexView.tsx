@@ -21,8 +21,34 @@ const IndexView: React.FC<IndexViewProps> = ({ onNavigate, setCursor }) => {
         return next;
       });
     };
+
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchY;
+      touchStartY = touchY; // Update for continuous movement
+
+      setProgress(prev => {
+        const next = Math.min(Math.max(prev + deltaY * 2.5, 0), 1000);
+        if (next >= 1000) setViewState('archive');
+        if (next <= 0) setViewState('home');
+        return next;
+      });
+    };
+
     window.addEventListener('wheel', scroll);
-    return () => window.removeEventListener('wheel', scroll);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener('wheel', scroll);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
   }, []);
 
   const p = progress / 1000;
@@ -31,15 +57,15 @@ const IndexView: React.FC<IndexViewProps> = ({ onNavigate, setCursor }) => {
     <>
       <div className="custom-scrollbar"><div className="scrollbar-thumb" style={{ height: `${p * 100}%` }} /></div>
       
-      <div className="view-layer home-layout" style={{ 
+      <div className="view-layer home-layout mobile-stack" style={{ 
         opacity: 1 - p, 
         transform: `scale(${1 - p * 0.1}) translateY(${-p * 50}vh)`, 
         pointerEvents: viewState === 'home' ? 'auto' : 'none' 
       }}>
-        <ScrambledText text="WHAT IF" isScrambling={hovered === 1} className="line-1" onMouseEnter={() => setHovered(1)} onMouseLeave={() => setHovered(null)} onClick={() => onNavigate('detail')} />
-        <TypewriterText initialText="MAKING" targetText="THINKING" isActive={hovered === 2} className="line-2" onMouseEnter={() => setHovered(2)} onMouseLeave={() => setHovered(null)} onClick={(w: string) => onNavigate('process', w)} />
-        <ScrambledText text="IS A KIND OF" isScrambling={hovered === 3} className="line-3" onMouseEnter={() => setHovered(3)} onMouseLeave={() => setHovered(null)} onClick={() => onNavigate('detail')} />
-        <TypewriterText initialText="THINKING" targetText="MAKING" isActive={hovered === 4} className="line-4" onMouseEnter={() => setHovered(4)} onMouseLeave={() => setHovered(null)} onClick={(w: string) => onNavigate('process', w)} />
+        <ScrambledText text="WHAT IF" isScrambling={hovered === 1} className="line-1 text-line" onMouseEnter={() => setHovered(1)} onMouseLeave={() => setHovered(null)} onClick={() => onNavigate('detail')} />
+        <TypewriterText initialText="MAKING" targetText="THINKING" isActive={hovered === 2} className="line-2 text-line" onMouseEnter={() => setHovered(2)} onMouseLeave={() => setHovered(null)} onClick={(w: string) => onNavigate('process', w)} />
+        <ScrambledText text="IS A KIND OF" isScrambling={hovered === 3} className="line-3 text-line" onMouseEnter={() => setHovered(3)} onMouseLeave={() => setHovered(null)} onClick={() => onNavigate('detail')} />
+        <TypewriterText initialText="THINKING" targetText="MAKING" isActive={hovered === 4} className="line-4 text-line" onMouseEnter={() => setHovered(4)} onMouseLeave={() => setHovered(null)} onClick={(w: string) => onNavigate('process', w)} />
       </div>
 
       <div className="view-layer archive-layout" style={{ 
