@@ -178,8 +178,40 @@ const ProcessView: React.FC<ProcessViewProps> = ({ word }) => {
     navigate('/');
   };
 
+  const isMobile = window.innerWidth < 768;
+
+  const handleNextSection = () => {
+    if (section < sections.length - 1) {
+      const nextSec = section + 1;
+      sectionRef.current = nextSec;
+      setSection(nextSec);
+      if (containerRef.current) containerRef.current.scrollTop = 0;
+    }
+  };
+
+  const handlePrevSection = () => {
+    if (section > 0) {
+      const nextSec = section - 1;
+      sectionRef.current = nextSec;
+      setSection(nextSec);
+      if (containerRef.current) containerRef.current.scrollTop = 0;
+    }
+  };
+
   return (
     <div className="view-layer process-layout">
+      <div className="process-word" onClick={handleBackToIndex} style={{ 
+        opacity: isVisualFocused ? 0.2 : 1,
+        transition: 'opacity 0.3s ease'
+      }}>
+        {word === 'THINKING' ? word : glitchWord}
+        {word === 'THINKING' && (
+          <div style={{ fontSize: '0.3em', marginTop: '1em', opacity: 0.5, textAlign: 'center' }}>
+            SECTION {section + 1} / 3
+          </div>
+        )}
+      </div>
+
       <FloatingImages sources={currentSources} onFocusChange={setIsVisualFocused} />
       
       {pullProgress > 0 && !isVisualFocused && (
@@ -196,6 +228,31 @@ const ProcessView: React.FC<ProcessViewProps> = ({ word }) => {
         }} />
       )}
 
+      {/* Mobile Section Navigation */}
+      {isMobile && word === 'THINKING' && !isVisualFocused && (
+        <div className="mobile-process-nav" style={{
+          position: 'fixed',
+          bottom: '100px',
+          left: 0,
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '20px',
+          zIndex: 2000
+        }}>
+          {section > 0 && (
+            <div className="nav-tab-btn" onClick={handlePrevSection}>
+              [ PREV SECTION ]
+            </div>
+          )}
+          {section < sections.length - 1 && (
+            <div className="nav-tab-btn" onClick={handleNextSection}>
+              [ NEXT SECTION ]
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="process-text" ref={containerRef} style={{ 
         scrollBehavior: 'smooth', 
         opacity: isVisualFocused ? 0.2 : 1,
@@ -203,18 +260,6 @@ const ProcessView: React.FC<ProcessViewProps> = ({ word }) => {
       }}>
         {renderContent()}
         <div style={{ marginTop: '2em', cursor: 'pointer', opacity: 0.5 }} onClick={handleBackToIndex}>[ BACK TO INDEX ]</div>
-      </div>
-      
-      <div className="process-word" onClick={handleBackToIndex} style={{ 
-        opacity: isVisualFocused ? 0.2 : 1,
-        transition: 'opacity 0.3s ease'
-      }}>
-        {word === 'THINKING' ? word : glitchWord}
-        {word === 'THINKING' && (
-          <div style={{ fontSize: '0.3em', marginTop: '1em', opacity: 0.5, textAlign: 'center' }}>
-            SECTION {section + 1} / 3
-          </div>
-        )}
       </div>
     </div>
   );
