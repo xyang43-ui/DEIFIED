@@ -115,6 +115,13 @@ body {
   background-color: var(--bg-color);
   z-index: 50;
   color: var(--fg-color);
+  overflow-y: auto;
+}
+.detail-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5em;
 }
 .detail-right { grid-column: 3; font-size: clamp(0.9rem, 1.2vw, 1rem); line-height: 1.6; text-align: left; color: var(--fg-color); }
 .detail-right p, .detail-right div, .process-text p, .process-text div { color: var(--fg-color); }
@@ -236,12 +243,45 @@ body {
   body { cursor: auto !important; }
 
   .home-layout {
-    font-size: 8vw; /* Scale down for narrow screens */
-    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 10vw;
   }
 
   .line-1, .line-2, .line-3, .line-4 {
-    margin: 0.2em 0;
+    justify-self: center !important;
+    padding: 0 !important;
+    margin: 0.15em 0;
+    font-size: 10vw !important;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.2;
+  }
+
+  .detail-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10vh 10vw;
+    gap: 2em;
+    overflow-y: auto;
+  }
+
+  .detail-left {
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1em;
+  }
+
+  .detail-right {
+    width: 100%;
+    font-size: 1rem !important;
+    text-align: justify;
+    padding-bottom: 10vh;
   }
 
   .process-layout {

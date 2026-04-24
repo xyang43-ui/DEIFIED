@@ -28,9 +28,10 @@ const IndexView: React.FC<IndexViewProps> = ({ onNavigate, setCursor }) => {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      if (e.cancelable) e.preventDefault();
       const touchY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchY;
-      touchStartY = touchY; // Update for continuous movement
+      const deltaY = (touchStartY - touchY) * 3; // Increase sensitivity for mobile
+      touchStartY = touchY;
 
       setProgress(prev => {
         const next = Math.min(Math.max(prev + deltaY * 2.5, 0), 1000);
@@ -40,8 +41,8 @@ const IndexView: React.FC<IndexViewProps> = ({ onNavigate, setCursor }) => {
       });
     };
 
-    window.addEventListener('wheel', scroll);
-    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('wheel', scroll, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     return () => {
@@ -54,7 +55,7 @@ const IndexView: React.FC<IndexViewProps> = ({ onNavigate, setCursor }) => {
   const p = progress / 1000;
 
   return (
-    <>
+    <div style={{ touchAction: 'none', width: '100%', height: '100%' }}>
       <div className="custom-scrollbar"><div className="scrollbar-thumb" style={{ height: `${p * 100}%` }} /></div>
       
       <div className="view-layer home-layout mobile-stack" style={{ 
@@ -92,7 +93,7 @@ const IndexView: React.FC<IndexViewProps> = ({ onNavigate, setCursor }) => {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
